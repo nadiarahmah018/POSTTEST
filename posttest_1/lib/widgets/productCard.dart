@@ -1,136 +1,189 @@
 import 'package:flutter/material.dart';
 
-// ProductCard -> widget custom untuk menampilkan 1 produk tanaman.
-// Dibangun dari Container, Row, Column, Text, Icon, SizedBox, dan
-// ElevatedButton, semua widget dasar yang dipelajari di modul 2.
-class ProductCard extends StatelessWidget {
-  // name, description, price -> properti Dart biasa (bukan widget baru),
-  // dipakai supaya setiap ProductCard bisa diisi data produk yang berbeda-beda
+class ProductCardHorizontal extends StatelessWidget {
+  // Properti Dart biasa (bukan widget baru) supaya data produk beda-beda
   final String name;
-  final String description;
   final String price;
+  final double rating;
+  final IconData icon;
 
-  const ProductCard({
+  const ProductCardHorizontal({
     super.key,
     required this.name,
-    required this.description,
     required this.price,
+    required this.rating,
+    this.icon = Icons.local_florist,
   });
 
   @override
   Widget build(BuildContext context) {
-    // Container -> membungkus seluruh card. Dipakai untuk mengatur padding,
-    // warna, border, dan borderRadius (lihat Modul 2 - Container)
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(
-          color: const Color(0xFFAEC3B0), // border hijau muda dari palet toko
-        ),
-        borderRadius: BorderRadius.circular(12),
+
+    return Container( // Container untuk membungkus seluruh isi card
+      padding: const EdgeInsets.all(12), //padding memberikan jarak antara isi card dengan border card
+      decoration: BoxDecoration( // BoxDecoration untuk mengatur tampilan card
+        color: Colors.white, 
+        border: Border.all(color: const Color(0xFFAEC3B0)), // garis tepi
+        borderRadius: BorderRadius.circular(12), // sudut container melengkung
       ),
-      // Row -> menyusun gambar produk dan informasi produk secara horizontal
-      // (Modul 2 - Column dan Row)
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+      child: Column( // Column untuk menyusun widget secara vertikal
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ================= Gambar Produk (placeholder) =================
-          // Container -> dipakai sebagai kotak gambar produk, karena belum
-          // ada foto asli
-          Container(
-            width: 120,
-            height: 120,
+          Container( // Container untuk membungkus icon produk
+            width: double.infinity, // lebar mengikuti parent
+            height: 100, // tinggi container
             decoration: BoxDecoration(
-              color: const Color(0xFFE3EED4), // warna cream sebagai latar placeholder
+              color: const Color(0xFFE3EED4),
               borderRadius: BorderRadius.circular(8),
             ),
-            // Icon -> sementara dipakai sebagai pengganti foto tanaman asli
-            // (Modul 2 - Icon)
-            child: const Icon(
-              Icons.local_florist,
-              size: 48,
-              color: Color(0xFF6B9071),
+            child: Icon(icon, size: 40, color: const Color(0xFF6B9071)), // menampilkan icon produk
+          ),
+          const SizedBox(height: 8), // SizedBox jarak vertikal 
+          Text( // menampilkan nama produk
+            name,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle( // TextStyle untuk mengatur tampilan teks
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF0F2A1D),
             ),
           ),
 
-          const SizedBox(width: 16), // SizedBox -> memberi jarak horizontal
+          const SizedBox(height: 4), // SizedBox untuk memberikan jarak vertikal
 
-          // ================= Informasi Produk =================
-          // Expanded -> memaksa Column mengisi sisa ruang yang tersedia
-          // pada Row (Modul 2 - Expanded)
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Text -> menampilkan nama produk (Modul 2 - Text)
-                Text(
-                  name,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF0F2A1D), // hijau tua dari palet toko
-                  ),
+          Row( // Row untuk menyusun widget secara horizontal
+            children: [
+              const Icon(Icons.star, size: 14, color: Colors.amber), // menampilkan icon bintang
+              const SizedBox(width: 4),
+              Text(
+                '$rating',
+                style: const TextStyle(fontSize: 12, color: Color(0xFF6B9071)),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 4), // SizedBox untuk memberikan jarak vertikal
+          Text(
+            price,
+            style: const TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF375534),
+            ),
+          ),
+
+          const SizedBox(height: 8), // SizedBox untuk memberikan jarak vertikal
+          SizedBox( // SizedBox untuk mengatur lebar tombol
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF375534),
+                foregroundColor: Colors.white,
+                minimumSize: const Size(double.infinity, 34),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(6),
                 ),
+              ),
+              child: const Icon(Icons.shopping_cart, size: 16), // menampilkan icon keranjang belanja
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
 
-                const SizedBox(height: 4),
+class ProductCardGrid extends StatelessWidget {
+  final String name;
+  final String price;
+  final double rating;
+  final IconData icon;
 
-                // Text -> menampilkan deskripsi singkat produk
-                Text(
-                  description,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Color(0xFF6B9071),
-                  ),
+  const ProductCardGrid({
+    super.key,
+    required this.name,
+    required this.price,
+    required this.rating,
+    this.icon = Icons.local_florist,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Container( // Container untuk membungkus seluruh isi card
+      padding: const EdgeInsets.all(12), // padding memberikan jarak antara isi card dengan border card
+      decoration: BoxDecoration( // BoxDecoration untuk mengatur tampilan card
+        color: Colors.white,
+        border: Border.all(color: const Color(0xFFAEC3B0)), 
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column( // Column untuk menyusun widget secara vertikal
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded( // Expanded untuk mengisi ruang yang tersedia di sisa ruang Column
+            child: Container( // Container untuk membuat area icon produk
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: const Color(0xFFE3EED4),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(icon, size: 36, color: const Color(0xFF6B9071)),
+            ),
+          ),
+
+          const SizedBox(height: 8), // SizedBox untuk memberikan jarak vertikal
+
+          Text( // menampilkan nama produk
+            name,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF0F2A1D),
+            ),
+          ),
+
+          const SizedBox(height: 4), // SizedBox untuk memberikan jarak vertikal
+
+          Row( // Row untuk menyusun widget secara horizontal
+            children: [
+              const Icon(Icons.star, size: 13, color: Colors.amber),
+              const SizedBox(width: 4), // SizedBox untuk memberikan jarak horizontal
+              Text( // menampilkan rating produk
+                '$rating',
+                style: const TextStyle(fontSize: 11, color: Color(0xFF6B9071)),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 4), // SizedBox untuk memberikan jarak vertikal
+
+          Text( // menampilkan harga produk
+            price,
+            style: const TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF375534),
+            ),
+          ),
+
+          const SizedBox(height: 8), // SizedBox untuk memberikan jarak vertikal
+
+          SizedBox( // SizedBox untuk mengatur lebar tombol
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF375534),
+                foregroundColor: Colors.white,
+                minimumSize: const Size(double.infinity, 32),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(6),
                 ),
-
-                const SizedBox(height: 4),
-
-                // Text -> menampilkan harga produk
-                Text(
-                  price,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF375534),
-                  ),
-                ),
-
-                const SizedBox(height: 8),
-
-                // ElevatedButton -> tombol untuk menambahkan produk ke keranjang
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF375534),
-                    foregroundColor: Colors.white,
-                    minimumSize: const Size(
-                      double.infinity,
-                      42,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                  ),
-                  // Row -> menyusun icon dan text tombol secara horizontal
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.shopping_cart,
-                        size: 20,
-                      ),
-                      SizedBox(width: 8),
-                      Text(
-                        'Masukkan Keranjang',
-                        style: TextStyle(
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
+              ),
+              child: const Icon(Icons.shopping_cart, size: 15), // menampilkan icon keranjang belanja
             ),
           ),
         ],
